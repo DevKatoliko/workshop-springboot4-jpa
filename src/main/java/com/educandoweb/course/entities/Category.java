@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_category")
@@ -20,7 +22,9 @@ public class Category implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	private Long id;
 	private String name;
-	@Transient //Anotation provisório para que o JPA não tente interpretar uma associação, para que não de problema na execução do programa
+	
+	@ManyToMany(mappedBy = "categories") // Nome da lista que sera o critério de mapeamento
+	@JsonIgnore // Para que o JPA não fique chamando as associações entre as tabelas infinitamente
 	private Set<Product> products = new HashSet<>();
 	
 	public Category() {
